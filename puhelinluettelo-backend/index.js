@@ -42,7 +42,7 @@ app.get('/api/persons', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
-
+    console.log(body, 'app.post')
     if (body.name === '' || body.number === '') {
         return response.status(400).json({error: 'content missing'})
     }
@@ -79,8 +79,11 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error))
 })
 
-app.put('api/persons/:id', (request, response, next) => {
-    console.log(request.params.id, 'params id')
+app.put('/', (req, res) => {
+    res.send("PUT Request Called")
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
     const body = request.body
 
     const person = {
@@ -89,7 +92,7 @@ app.put('api/persons/:id', (request, response, next) => {
     }
 
     Person.findByIdAndUpdate(request.params.id, person, { new: true })
-        .then(updatedPerson => {s
+        .then(updatedPerson => {
             response.json(updatedPerson)})
         .catch(error => next(error))
 })
