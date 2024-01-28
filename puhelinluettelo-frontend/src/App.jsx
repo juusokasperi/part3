@@ -38,10 +38,14 @@ const App = () => {
   const updatePerson = (person) => {
     const ok = window.confirm(`${newName} is already in the phonebook, update number?`)
     if (ok) {
+      const updatedObject = {
+        name: person.name,
+        number: newNumber
+      }
       personService
-      .update(person.id, {...person, number:newNumber})
-      .then((updatedPerson) => {
-        setPersons(persons.map(p => p.id !== person.id ? p :updatedPerson))
+      .update(person.id, updatedObject)
+      .then(updatedPerson => {
+        setPersons(persons.map(p => p.id !== person.id ? p : updatedPerson))
         notifyWith(`Contact ${person.name} updated.`)
       })
       .catch(() => {
