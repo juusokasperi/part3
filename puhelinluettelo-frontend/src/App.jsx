@@ -45,14 +45,18 @@ const App = () => {
       personService
       .update(person.id, updatedObject)
       .then(updatedPerson => {
+        console.log(updatedPerson)
         setPersons(persons.map(p => p.id !== person.id ? p : updatedPerson))
         notifyWith(`Contact ${person.name} updated.`)
       })
-      .catch(() => {
-        notifyWith(`${person.name} has already been removed`, 'error')
-        setPersons(persons.filter(p => p.id !== person.id))
+      .catch((error) => {
+        if (error.response.status === 404) {
+          notifyWith(`New number ${updatedObject.number} is already removed`, 'error')
+          setPersons(persons.filter(p => p.id !== person.id))
+        } else if (error.response.status === 400) {
+          notifyWith(`Number ${updatedObject.number} is too short or formatted incorrently`, 'error')
+        }
       })
-      
       cleanForm()
     }
   }
@@ -77,6 +81,9 @@ const App = () => {
       setPersons(persons.concat(createdPerson))
       notifyWith(`${createdPerson.name} added to the phonebook.`)
       cleanForm()
+    })
+    .catch(error => {
+      notifyWith(`${error.response.data.error}`, 'error')
     })
   }
 
@@ -112,6 +119,8 @@ const App = () => {
         setNewName={setNewName}
         setNewNumber={setNewNumber}
         />
+        <p><i>Minimum length of name is 3 characters.<br/>
+          Number must be at least 8 characters long, formatted XXX-... or XX-....</i></p>
       <h3>Numbers</h3>
       <Persons
         persons={personsToShow}
