@@ -7,12 +7,14 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
     "build:ui": "rm -rf dist && cd ../puhelinluettelo-frontend && npm run build && cp -r dist ../puhelinluettelo-backend",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "author": "Juuso Rinta",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^8.56.0",
     "nodemon": "^3.0.3"
   },
   "dependencies": {
